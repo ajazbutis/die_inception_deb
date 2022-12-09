@@ -1,0 +1,76 @@
+version: '3' 
+
+services:
+  mariadb:
+    build: ./requirements/mariadb
+    image: mdb:${TAG}
+    container_name: m_db
+    ports: 
+      - 3306:3306
+    environment:
+      ROOT_PASS: ${ROOT_PASS}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+    volumes:
+      - "db_vol:/var/lib/mysql"
+    restart: unless-stopped 
+    networks:
+      - die_inception
+  wordpress:
+    build: ./requirements/wordpress
+    image: wpress:${TAG}
+    container_name: w_press
+    ports:
+      - 9000:9000 
+    environment:
+      DOMAIN: ${DOMAIN}
+      DB_HOST: ${DB_HOST}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      ROOT_PASS: ${ROOT_PASS}
+      DB_NAME: ${DB_NAME}
+      WP_ADMN: ${WP_ADMN}
+      WP_ADMN_PASS: ${WP_ADMN_PASS}
+      WP_USER: ${DB_USER}
+      WP_USER_PASS: ${WP_USER_PASS}
+      WP_TITLE: ${WP_TITLE}
+      WP_ADMN_EMAIL: ${WP_ADMN_EMAIL} 
+      WP_USER_EMAIL: ${WP_USER_EMAIL}
+    volumes:
+      - "wp_vol:/var/www/html"
+    restart: unless-stopped 
+    networks:
+      - die_inception
+    depends_on:
+      - mariadb
+  web:
+    build: ./requirements/nginx 
+    image: mnginx:${TAG}
+    container_name: m_nginx
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - "wp_vol:/var/www/html"
+    restart: unless-stopped 
+    networks:
+      - die_inception 
+    depends_on:
+      - wordpress
+volumes:
+  db_vol:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/ajazbuti/data/db_vol
+  wp_vol:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/ajazbuti/data/wp_vol
+
+networks:
+  die_inception:
