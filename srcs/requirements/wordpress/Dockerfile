@@ -8,9 +8,7 @@ RUN mv wp-cli.phar /usr/bin/wp
 COPY conf/www.conf /etc/php/7.3/fpm/pool.d
 WORKDIR /var/www/html
 COPY tools/sh.sh /tmp/
-COPY tools/index.html ./
-COPY tools/Bender_Rodriguez.png ./
-WORKDIR /var/www/html/wordpress
+COPY tools/wp-config.php /tmp/
 RUN chmod +x /tmp/sh.sh
 ENTRYPOINT ["/bin/bash", "-x", "/tmp/sh.sh"]
 EXPOSE 9000

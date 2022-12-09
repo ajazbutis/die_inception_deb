@@ -15,5 +15,6 @@ if [ ! -d /var/lib/mysql/${DB_NAME} ] ; then
 fi
 
 sleep 1
+
 mysqladmin -p${ROOT_PASS} shutdown
 mysqld_safe
