@@ -5,8 +5,6 @@ services:
     build: ./requirements/mariadb
     image: mdb:${TAG}
     container_name: m_db
-    ports: 
-      - 3306:3306
     environment:
       ROOT_PASS: ${ROOT_PASS}
       DB_NAME: ${DB_NAME}
@@ -21,8 +19,6 @@ services:
     build: ./requirements/wordpress
     image: wpress:${TAG}
     container_name: w_press
-    ports:
-      - 9000:9000 
     environment:
       DOMAIN: ${DOMAIN}
       DB_HOST: ${DB_HOST}

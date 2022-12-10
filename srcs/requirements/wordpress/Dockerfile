@@ -11,4 +11,3 @@ COPY tools/sh.sh /tmp/
 COPY tools/wp-config.php /tmp/
 RUN chmod +x /tmp/sh.sh
 ENTRYPOINT ["/bin/bash", "-x", "/tmp/sh.sh"]
-EXPOSE 9000
